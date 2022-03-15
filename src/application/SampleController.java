@@ -86,8 +86,7 @@ public class SampleController {
 	private TextField lname;
 	@FXML
 	private TextField code;
-	@FXML
-	private TextField reg;
+	
 	@FXML
 	private TextField sec;
 	@FXML
@@ -160,12 +159,12 @@ public class SampleController {
 		//*******************************************************************************************
 		//Activating other buttons
 		startCam.setVisible(false);
-		eyeBtn.setDisable(false);
+		//eyeBtn.setDisable(false);
 		stopBtn.setVisible(true);
 		//ocrBtn.setDisable(false);
-		capBtn.setDisable(false);
+		//capBtn.setDisable(false);
 		motionBtn.setDisable(false);
-		gesture.setDisable(false);
+		//gesture.setDisable(false);
 		saveBtn.setDisable(false);
 
 		if (isDBready) {
@@ -174,9 +173,9 @@ public class SampleController {
 
 		dataPane.setDisable(false);
 		// shapeBtn.setDisable(false);
-		smileBtn.setDisable(false);
-		fullBodyBtn.setDisable(false);
-		upperBodyBtn.setDisable(false);
+		//smileBtn.setDisable(false);
+		//fullBodyBtn.setDisable(false);
+		//upperBodyBtn.setDisable(false);
 
 		if (stopRecBtn.isDisable()) {
 			stopRecBtn.setDisable(false);
@@ -196,6 +195,7 @@ public class SampleController {
 		File[] listOfFiles = folder.listFiles();
 		
 		//Image reader from the mentioned folder
+	tile.getChildren().clear();
 		for (final File file : listOfFiles) {
 
 			imageView1 = createImageView(file);
@@ -222,44 +222,40 @@ public class SampleController {
 		if (count > 0) {
 
 			//Retrieved data will be shown in Fetched Data pane
-			String t = "********* Face Data: " + user.get(1) + " " + user.get(2) + " *********";
+			String t = "********* Etudiant: " + user.get(1) + " " + user.get(2) + " *********";
 
 			outEvent.add(t);
 
-			String n1 = "First Name\t\t:\t" + user.get(1);
+			String n1 = "Nom\t\t:\t" + user.get(1);
 
 			outEvent.add(n1);
 
 			output.setItems(outEvent);
 
-			String n2 = "Last Name\t\t:\t" + user.get(2);
+			String n2 = "Prenom\t\t:\t" + user.get(2);
 
 			outEvent.add(n2);
 
 			output.setItems(outEvent);
 
-			String fc = "Face Code\t\t:\t" + user.get(0);
+			String fc = "Code\t\t:\t" + user.get(0);
 
 			outEvent.add(fc);
 
 			output.setItems(outEvent);
 
-			String r = "Reg no\t\t\t:\t" + user.get(3);
+			String r = "Age\t\t\t:\t" + user.get(3);
 
 			outEvent.add(r);
 
 			output.setItems(outEvent);
 
-			String a = "Age \t\t\t\t:\t" + user.get(4);
+			String a = "Filiere\t\t\t:\t" + user.get(4);
 
 			outEvent.add(a);
 
 			output.setItems(outEvent);
-			String s = "Section\t\t\t:\t" + user.get(5);
-
-			outEvent.add(s);
-
-			output.setItems(outEvent);
+		
 
 		}
 
@@ -299,7 +295,7 @@ public class SampleController {
 	protected void saveFace() throws SQLException {
 
 		//Input Validation
-		if (fname.getText().trim().isEmpty() || reg.getText().trim().isEmpty() || code.getText().trim().isEmpty()) {
+		if (fname.getText().trim().isEmpty()  || code.getText().trim().isEmpty()) {
 
 			new Thread(() -> {
 
@@ -332,14 +328,14 @@ public class SampleController {
 					faceDetect.setAge(Integer.parseInt(age.getText()));
 					faceDetect.setCode(Integer.parseInt(code.getText()));
 					faceDetect.setSec(sec.getText());
-					faceDetect.setReg(Integer.parseInt(reg.getText()));
+					
 
 					database.setFname(fname.getText());
 					database.setLname(lname.getText());
 					database.setAge(Integer.parseInt(age.getText()));
 					database.setCode(Integer.parseInt(code.getText()));
 					database.setSec(sec.getText());
-					database.setReg(Integer.parseInt(reg.getText()));
+					
 
 					database.insert();
 					
@@ -406,10 +402,10 @@ public class SampleController {
 		saveBtn.setDisable(true);
 		dataPane.setDisable(true);
 		stopRecBtn.setDisable(true);
-		eyeBtn.setDisable(true);
-		smileBtn.setDisable(true);
-		fullBodyBtn.setDisable(true);
-		upperBodyBtn.setDisable(true);
+		//eyeBtn.setDisable(true);
+		//smileBtn.setDisable(true);
+		//fullBodyBtn.setDisable(true);
+		//upperBodyBtn.setDisable(true);
 		
 		database.db_close();
 		putOnLog("Database Connection Closed");

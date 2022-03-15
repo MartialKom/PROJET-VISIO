@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
+//import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
 
@@ -28,6 +29,8 @@ import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
+import org.opencv.videoio.VideoCapture;
+
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
@@ -140,19 +143,21 @@ public class FaceDetector implements Runnable {
 	public void run() {
 		try {
 			try {
-				grabber = OpenCVFrameGrabber.createDefault(0); //parameter 0 default camera , 1 for secondary
+				grabber = OpenCVFrameGrabber.createDefault(1); //parameter 0 default camera , 1 for secondary
 
 				grabber.setImageWidth(700);
 				grabber.setImageHeight(700);
 				grabber.start();
 
 				grabbedImage = grabberConverter.convert(grabber.grab());
+				
+		
 
 				storage = CvMemStorage.create();
 			} catch (Exception e) {
 				if (grabber != null)
 					grabber.release();
-				grabber = new OpenCVFrameGrabber(0);
+				grabber = new OpenCVFrameGrabber(1);
 				grabber.setImageWidth(700);
 				grabber.setImageHeight(700);
 				grabber.start();
@@ -174,7 +179,7 @@ public class FaceDetector implements Runnable {
 				Graphics2D g2 = image.createGraphics();
 
 				if (faces == null) {
-					cvClearMemStorage(storage);
+				cvClearMemStorage(storage);
 					
 					//creating a temporary image
 					temp = cvCreateImage(cvGetSize(grabbedImage), grabbedImage.depth(), grabbedImage.nChannels());
@@ -284,7 +289,7 @@ public class FaceDetector implements Runnable {
 								org = new CvPoint(r.x(), r.y());
 
 								if (isRecFace) {
-									String names="Unknown Person!";
+									String names="Inconnu!";
 									this.recogniseCode = faceRecognizer.recognize(temp);
 
 									//getting recognised user from the database
@@ -297,6 +302,14 @@ public class FaceDetector implements Runnable {
 										this.output = user;
 
 										names = user.get(1) + " " + user.get(2);
+										
+						/*				Insertion du nom dans le fichier de présence et dans la base de données
+										
+										recuperer les informations de la liste de présences (date, heure, nom du prof, matiere,
+										
+										filiere) afin de la créer
+										
+										*/
 									}
 								
 									//printing recognised person name into the frame

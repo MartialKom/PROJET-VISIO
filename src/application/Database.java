@@ -9,23 +9,26 @@ class Database {
 
 	public String fname;
 	public String Lname;
-	public int reg;
+	
 	public int age;
 	public String sec;
 
-	public final String Database_name = "ghosteye";
+	public final String Database_name = "visio";
 	public final String Database_user = "root";
-	public final String Database_pass = "";
+	public final String Database_pass = "mercip@p@123";
 
 	public Connection con;
 
 	public boolean init() throws SQLException {
+		
+		String lien="jdbc:mysql://localhost:3306/visio?verifyServerCertificate=false&useSSL=true";
+		String user="root";
+		String pass="mercip@p@123";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			try {
-				this.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + Database_name, Database_user,
-						Database_pass);
+				this.con = DriverManager.getConnection(lien,user,pass);
 			} catch (SQLException e) {
 
 				System.out.println("Error: Database Connection Failed ! Please check the connection Setting");
@@ -45,7 +48,7 @@ class Database {
 	}
 
 	public void insert() {
-		String sql = "INSERT INTO face_bio (code, first_name, last_name, reg, age , section) VALUES (?, ?, ?, ?,?,?)";
+		String sql = "INSERT INTO face_bio (code, first_name, last_name, age, section) VALUES (?, ?, ?, ?,?)";
 
 		PreparedStatement statement = null;
 		try {
@@ -61,9 +64,9 @@ class Database {
 			statement.setString(2, this.fname);
 
 			statement.setString(3, this.Lname);
-			statement.setInt(4, this.reg);
-			statement.setInt(5, this.age);
-			statement.setString(6, this.sec);
+			
+			statement.setInt(4, this.age);
+			statement.setString(5, this.sec);
 
 			int rowsInserted = statement.executeUpdate();
 			if (rowsInserted > 0) {
@@ -102,8 +105,8 @@ class Database {
 				user.add(1, rs.getString(3));
 				user.add(2, rs.getString(4));
 				user.add(3, Integer.toString(rs.getInt(5)));
-				user.add(4, Integer.toString(rs.getInt(6)));
-				user.add(5, rs.getString(7));
+				user.add(4, rs.getString(6));
+				
 
 				/*
 				 * System.out.println(app.getCode());
@@ -163,13 +166,7 @@ class Database {
 		Lname = lname;
 	}
 
-	public int getReg() {
-		return reg;
-	}
 
-	public void setReg(int reg) {
-		this.reg = reg;
-	}
 
 	public int getAge() {
 		return age;

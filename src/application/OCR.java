@@ -33,7 +33,7 @@ public class OCR
        
         //to use tesseract api,at first you have to install tesseract with desired language training data on your system.After That you have to mention 
        //the installation folder.
-       if(api.Init("C:/tessdata", "eng") != 0)
+       if(api.Init("E:\\OCR\\Tesseract-OCR\\tessdata", "eng") != 0)
        {
     	   System.out.println("could not initialize tesseract");
     	   System.exit(1);
@@ -43,7 +43,7 @@ public class OCR
        //
        
        //For Bengali Language
-       /*    if(api.Init("C:/tesseract-ocr/tessdata", "ben") != 0)
+        /* if(api.Init("C:\\Program Files (x86)\\Tesseract-OCR\\tessdata", "ben") != 0)
        {
     	   System.out.println("could not initialize tesseract");
     	   System.exit(1);
