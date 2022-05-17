@@ -270,7 +270,7 @@ public class FaceDetector implements Runnable {
 						}
 
 						if (faces != null) {
-							g2.setColor(Color.green);
+							g2.setColor(Color.ORANGE);  
 							g2.setStroke(new BasicStroke(2));
 							int total = faces.total();
 
@@ -279,7 +279,7 @@ public class FaceDetector implements Runnable {
 								//printing rectange box where face detected frame by frame
 								CvRect r = new CvRect(cvGetSeqElem(faces, i));
 								g2.drawRect((r.x() * 4), (r.y() * 4), (r.width() * 4), (r.height() * 4));
-
+								
 								CvRect re = new CvRect((r.x() * 4), r.y() * 4, (r.width() * 4), r.height() * 4);
 
 								cvSetImageROI(temp, re);
@@ -293,6 +293,7 @@ public class FaceDetector implements Runnable {
 									this.recogniseCode = faceRecognizer.recognize(temp);
 
 									//getting recognised user from the database
+									g2.setColor(Color.RED);
 									
 									if(recogniseCode != -1)
 									{
@@ -302,6 +303,8 @@ public class FaceDetector implements Runnable {
 										this.output = user;
 
 										names = user.get(1) + " " + user.get(2);
+										
+										g2.setColor(Color.GREEN);
 										
 						/*				Insertion du nom dans le fichier de présence et dans la base de données
 										
@@ -313,7 +316,8 @@ public class FaceDetector implements Runnable {
 									}
 								
 									//printing recognised person name into the frame
-									g2.setColor(Color.WHITE);
+									
+									
 									g2.setFont(new Font("Arial Black", Font.BOLD, 20));
 									
 									g2.drawString(names, (int) (r.x() * 6.5), r.y() * 4);

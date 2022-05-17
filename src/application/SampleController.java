@@ -250,7 +250,7 @@ public class SampleController {
 
 			output.setItems(outEvent);
 
-			String a = "Filiere\t\t\t:\t" + user.get(4);
+			String a = "Filiere\t:\t" + user.get(4);
 
 			outEvent.add(a);
 
