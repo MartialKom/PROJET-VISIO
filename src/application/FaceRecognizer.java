@@ -103,7 +103,7 @@ public class FaceRecognizer {
 		cvtColor(faces, faces, CV_BGR2GRAY);
 
 		IntPointer label = new IntPointer(1);
-		DoublePointer confidence = new DoublePointer(0);
+		DoublePointer confidence = new DoublePointer(0); // D'abord 0
 		
  
 		this.faceRecognizer.predict(faces, label, confidence);
@@ -113,13 +113,13 @@ public class FaceRecognizer {
 			
 	 
 		 
-		//System.out.println(confidence.get(0));
+		System.out.println(confidence.get(0));
 		
  
 	
-		//Confidence value less than 60 means face is known 
+		//Confidence value less than 60 means face is known 43
 		//Confidence value greater than 60 means face is unknown 
-		 if(confidence.get(0) > 60)
+		 if(confidence.get(0) > 46 )
 		 {
 			 //System.out.println("-1");
 			 return -1;

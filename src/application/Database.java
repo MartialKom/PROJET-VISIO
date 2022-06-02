@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Database {
-	public int code;
+	public int matricule;
 
 	public String fname;
 	public String Lname;
@@ -60,7 +60,7 @@ class Database {
 
 		try {
 
-			statement.setInt(1, this.code);
+			statement.setInt(1, this.matricule);
 			statement.setString(2, this.fname);
 
 			statement.setString(3, this.Lname);
@@ -101,11 +101,11 @@ class Database {
 				 * app.setAge(rs.getInt(6)); app.setSec(rs.getString(7));
 				 */
 
-				user.add(0, Integer.toString(rs.getInt(2)));
-				user.add(1, rs.getString(3));
-				user.add(2, rs.getString(4));
-				user.add(3, Integer.toString(rs.getInt(5)));
-				user.add(4, rs.getString(6));
+				user.add(0, Integer.toString(rs.getInt(1)));
+				user.add(1, rs.getString(2));
+				user.add(2, rs.getString(3));
+				user.add(3, Integer.toString(rs.getInt(4)));
+				user.add(4, rs.getString(5));
 				
 
 				/*
@@ -143,11 +143,11 @@ class Database {
 	
 	
 	public int getCode() {
-		return code;
+		return matricule;
 	}
 
 	public void setCode(int code) {
-		this.code = code;
+		this.matricule = code;
 	}
 
 	public String getFname() {

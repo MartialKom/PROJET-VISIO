@@ -76,6 +76,8 @@ BorderPane{
     -fx-background-position: center 7px;
 }
 
+
+
 .stop2
 {
 
@@ -91,6 +93,12 @@ BorderPane{
     -fx-background-repeat: no-repeat;
 
     -fx-background-position: center 7px;
+}
+
+.listButton
+{
+
+	
 }
 
 .stop1

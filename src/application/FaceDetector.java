@@ -54,6 +54,7 @@ public class FaceDetector implements Runnable {
 
 	Database database = new Database();
 	ArrayList<String> user;
+	Liste liste;
 
 	FaceRecognizer faceRecognizer = new FaceRecognizer();
 	MotionDetector motionDetector = new MotionDetector();
@@ -72,6 +73,7 @@ public class FaceDetector implements Runnable {
 	
 	public boolean saveFace = false;
 	public boolean isRecFace = false;
+	public boolean ismakeList = false;
 	public boolean isOutput = false;
 	public boolean isOcrMode = false;
 	public boolean isMotion = false;
@@ -97,7 +99,7 @@ public class FaceDetector implements Runnable {
 	public ImageView frames;
 	
 	
-	private CvSeq faces = null;
+	public CvSeq faces = null;
 	private CvSeq eyes = null;
 	private CvSeq smile = null;
 	private CvSeq upperBody = null;
@@ -107,7 +109,7 @@ public class FaceDetector implements Runnable {
 	
 
 	int recogniseCode;
-	public int code;
+	public int matricule;
 	public int reg;
 	public int age;
 	
@@ -115,6 +117,15 @@ public class FaceDetector implements Runnable {
 	public String Lname; //last name
 	public String sec; //section
 	public String name; 
+	public String repertoire;
+
+	public String getRepertoire() {
+		return repertoire;
+	}
+
+	public void setRepertoire(String repertoire) {
+		this.repertoire = repertoire;
+	}
 
 	public void init() {
 		faceRecognizer.init();
@@ -131,6 +142,7 @@ public class FaceDetector implements Runnable {
 
 	public void start() {
 		try {
+			faces=null;
 			new Thread(this).start();
 		} catch (Exception e) {
 			if (exception == null) {
@@ -276,7 +288,7 @@ public class FaceDetector implements Runnable {
 
 							for (int i = 0; i < total; i++) {
 								
-								//printing rectange box where face detected frame by frame
+								//printing rectangle box where face detected frame by frame
 								CvRect r = new CvRect(cvGetSeqElem(faces, i));
 								g2.drawRect((r.x() * 4), (r.y() * 4), (r.width() * 4), (r.height() * 4));
 								
@@ -302,17 +314,27 @@ public class FaceDetector implements Runnable {
 										user = database.getUser(this.recogniseCode);
 										this.output = user;
 
-										names = user.get(1) + " " + user.get(2);
+										names = user.get(1) + " "; //user.get(2);
 										
 										g2.setColor(Color.GREEN);
 										
-						/*				Insertion du nom dans le fichier de présence et dans la base de données
+										if(ismakeList) 
+										{
+											
+											liste = new Liste();
+											
+											liste.editerListe(user.get(0), user.get(1), user.get(2), user.get(4), repertoire);
+											
+						/*			
+						 * 
+						 * On vérifie la valeur de la variable. Si 0 on passe à l'écriture du fichier
+						 * 	Insertion du nom dans le fichier de présence et dans la base de données
 										
 										recuperer les informations de la liste de présences (date, heure, nom du prof, matiere,
 										
 										filiere) afin de la créer
-										
 										*/
+										}
 									}
 								
 									//printing recognised person name into the frame
@@ -326,7 +348,7 @@ public class FaceDetector implements Runnable {
 
 								if (saveFace) { //saving captured face to the disk
 									//keep it in mind that face code should be unique to each person
-									String fName = "faces/" + code + "-" + fname + "_" + Lname + "_" + count + ".jpg";
+									String fName = "faces/" + matricule + "-" + fname + "_" + Lname + "_" + count + ".jpg";
 									cvSaveImage(fName, temp);
 									count++;
 
@@ -676,11 +698,11 @@ public class FaceDetector implements Runnable {
 	}
 
 	public int getCode() {
-		return code;
+		return matricule;
 	}
 
 	public void setCode(int code) {
-		this.code = code;
+		this.matricule = code;
 	}
 
 	public String getFname() {
@@ -734,10 +756,27 @@ public class FaceDetector implements Runnable {
 	public Boolean getIsRecFace() {
 		return isRecFace;
 	}
+	
+	
 
 	public void setIsRecFace(Boolean isRecFace) {
 		this.isRecFace = isRecFace;
 	}
+	
+	public void setIsMakeList(Boolean f) {
+		this.ismakeList = f;
+	}
+	
+	public Boolean getIsMakeList() {
+		return ismakeList;
+	}
 
+	public boolean faceDetected() {
+		if(faces != null) {
+			return true;
+		}
+		
+		return false;
+	}
 
 }

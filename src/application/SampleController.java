@@ -19,21 +19,39 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup; 
+import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.*;
+
+
 
 import java.awt.FontFormatException;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
 
 import application.FaceDetector;
 import application.Database;
 import application.OCR;
 import application.Database;
 
-public class SampleController {
+public class SampleController  {
 
 	//**********************************************************************************************
 	//Mention The file location path where the face will be saved & retrieved
@@ -73,6 +91,12 @@ public class SampleController {
 	@FXML
 	private Button stopRecBtn;
 	@FXML
+	private Button beginList;
+	@FXML
+	private Button endList;
+	@FXML
+	private Button filechoose;
+	@FXML
 	private ImageView frame;
 	@FXML
 	private ImageView motionView;
@@ -86,6 +110,14 @@ public class SampleController {
 	private TextField lname;
 	@FXML
 	private TextField code;
+	@FXML
+	private TextField filiere;
+	@FXML
+	private TextField nomprof;
+	@FXML 
+	private TextField nomcours;
+	@FXML
+	private TextField nomfich;
 	
 	@FXML
 	private TextField sec;
@@ -102,11 +134,29 @@ public class SampleController {
 	@FXML
 	public Label warning;
 	@FXML
+	public Label warningcode;
+	@FXML
+	public Label warningface;
+	@FXML
+	public Label warningperiode;
+	@FXML
 	public Label title;
 	@FXML
 	public TilePane tile;
 	@FXML
 	public TextFlow ocr;
+	
+	@FXML
+	public DatePicker dateFiche; //LocalDate localDate = dateFiche.getValue(); String s = String.valueOf(localDate);
+	@FXML
+	public RadioButton periode1;
+	@FXML
+	public RadioButton periode2; //Methode isSelected pour verifier que c'est sélectionné
+	@FXML
+	public ToggleGroup tg;
+	
+	
+
 //**********************************************************************************************
 	FaceDetector faceDetect = new FaceDetector();	//Creating Face detector object									
 	ColoredObjectTracker cot = new ColoredObjectTracker(); //Creating Color Object Tracker object		
@@ -121,6 +171,12 @@ public class SampleController {
 
 	public boolean enabled = false;
 	public boolean isDBready = false;
+	
+
+	FileChooser fileChooser = new FileChooser();
+	DirectoryChooser directoryChooser = new DirectoryChooser();
+	
+	
 
 	
 	//**********************************************************************************************
@@ -133,12 +189,31 @@ public class SampleController {
 		event.add(logs);
 
 		logList.setItems(event);
+		
+	}
+	
+	@FXML
+	protected void chooseFile() {
+		
+		directoryChooser.setTitle("Choisir le repertoire");
+		File dir = directoryChooser.showDialog(new Stage());
 
+		try {
+	
+		String name = dir.getPath();
+		nomfich.setText(name);
+		}catch(Exception e) {
+			
+			
+		}
+		
+		
+		
 	}
 
 	@FXML
 	protected void startCamera() throws SQLException {
-
+		
 		//*******************************************************************************************
 		//initializing objects from start camera button event
 		faceDetect.init();
@@ -146,7 +221,8 @@ public class SampleController {
 		faceDetect.setFrame(frame);
 
 		faceDetect.start();
-
+		
+	
 		if (!database.init()) {
 
 			putOnLog("Error: Database Connection Failed ! ");
@@ -178,7 +254,7 @@ public class SampleController {
 		//upperBodyBtn.setDisable(false);
 
 		if (stopRecBtn.isDisable()) {
-			stopRecBtn.setDisable(false);
+			//stopRecBtn.setDisable(false);
 		}
 		//*******************************************************************************************
 		
@@ -206,6 +282,150 @@ public class SampleController {
 		//**********************************************************************************************
 	}
 	int count = 0;
+	
+	
+	@FXML
+	protected void makeList() {
+		
+		
+		
+		// Vérifier que les champs de présences sont tous entrés
+		
+		if(filiere.getText().equals("") || dateFiche.getValue()==null || nomprof.getText().equals("") || nomcours.getText().equals("") || nomfich.getText().equals("")) 
+		{
+		
+			new Thread(() -> {
+
+				try 
+				{
+					warning.setVisible(true);
+
+					Thread.sleep(4000);
+
+					warning.setVisible(false);
+
+				} catch (InterruptedException ex) 
+				{
+					
+				}
+
+			}).start();
+			
+		}
+		
+		else if(!periode1.isSelected() && !periode2.isSelected() ) 
+		{
+			new Thread(() -> {
+
+				try 
+				{
+					warningperiode.setVisible(true);
+
+					Thread.sleep(4000);
+
+					warningperiode.setVisible(false);
+
+				} catch (InterruptedException ex) 
+				{
+					
+				}
+
+			}).start();
+			
+			
+		}
+		
+		else 
+		{
+		
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+			DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			LocalDate localDate = dateFiche.getValue(); 
+			String date = dtf2.format(localDate);
+			String heure = dtf.format(LocalTime.now());
+			
+			
+			String liste = "\\"+date+"#"+heure+".txt";
+			System.out.println(liste);
+			
+			String chemin = nomfich.getText();
+			System.out.println(chemin);
+			
+			String repertoire = chemin+liste;
+			System.out.println(repertoire);
+			
+			File fichier = new File(repertoire);
+			
+			try 
+			{
+				fichier.createNewFile();
+				
+			}catch(IOException e)
+			
+			{
+				
+				System.out.println(e.getMessage());
+			}
+			
+			
+			/*
+				Ecrire l'en tete du fichier (Filiere, date, nom du professeur, nom du cours et periode)
+			*/
+			String periode=null;
+			
+			if(periode1.isSelected()) periode = periode1.getText();
+			if(periode2.isSelected()) periode = periode2.getText();
+			
+			String ligne = String.valueOf(dateFiche.getValue())+"||"+filiere.getText()+"||"+nomprof.getText()+"||"+nomcours.getText()+"||"+periode;
+			try 
+			{
+				FileWriter writer = new FileWriter(fichier,true);
+				BufferedWriter bw = new BufferedWriter(writer);
+				
+				
+				bw.newLine();
+				bw.append(ligne);
+				bw.newLine();
+				bw.newLine();
+				bw.append("*****************************Liste des étudiants présents*****************************");
+				bw.newLine();
+				
+				bw.close();
+				writer.close();
+				
+			}catch(Exception e1) 
+			
+			{
+				
+			}
+			
+			
+			// On envoi une valeur True pour la variable ismakeList
+			faceDetect.setRepertoire(repertoire);
+			faceDetect.setIsMakeList(true);
+			beginList.setVisible(false);
+			beginList.setDisable(true);
+			
+			endList.setVisible(true);
+			endList.setDisable(false);
+			putOnLog("L'appel à démarré");
+		
+		}
+
+	}
+	
+	@FXML
+	protected void stopmakeList() {
+		
+		faceDetect.setIsMakeList(false);
+		
+		endList.setVisible(false);
+		endList.setDisable(true);
+		
+		beginList.setVisible(true);
+		beginList.setDisable(false);
+		putOnLog("L'appel est terminé");
+	}
 
 	@FXML
 	protected void faceRecognise() {
@@ -214,51 +434,56 @@ public class SampleController {
 		faceDetect.setIsRecFace(true);
 		// printOutput(faceDetect.getOutput());
 
-		recogniseBtn.setText("Get Face Data");
+		recogniseBtn.setText("Détails parsonels");
+		beginList.setDisable(false);
 
 		//Getting detected faces
 		user = faceDetect.getOutput();
-
-		if (count > 0) {
-
-			//Retrieved data will be shown in Fetched Data pane
-			String t = "********* Etudiant: " + user.get(1) + " " + user.get(2) + " *********";
-
-			outEvent.add(t);
-
-			String n1 = "Nom\t\t:\t" + user.get(1);
-
-			outEvent.add(n1);
-
-			output.setItems(outEvent);
-
-			String n2 = "Prenom\t\t:\t" + user.get(2);
-
-			outEvent.add(n2);
-
-			output.setItems(outEvent);
-
-			String fc = "Code\t\t:\t" + user.get(0);
-
-			outEvent.add(fc);
-
-			output.setItems(outEvent);
-
-			String r = "Age\t\t\t:\t" + user.get(3);
-
-			outEvent.add(r);
-
-			output.setItems(outEvent);
-
-			String a = "Filiere\t:\t" + user.get(4);
-
-			outEvent.add(a);
-
-			output.setItems(outEvent);
-		
-
+		try {
+			if (count > 0) 
+			{
+	
+				//Retrieved data will be shown in Fetched Data pane
+				String t = "********* Etudiant: " + user.get(1) + " " + user.get(2) + " *********";
+	
+				outEvent.add(t);
+	
+				String n1 = "Nom\t\t:\t" + user.get(1);
+	
+				outEvent.add(n1);
+	
+				output.setItems(outEvent);
+	
+				String n2 = "Prenom\t\t:\t" + user.get(2);
+	
+				outEvent.add(n2);
+	
+				output.setItems(outEvent);
+	
+				String fc = "code\t\t:\t" + user.get(0);
+	
+				outEvent.add(fc);
+	
+				output.setItems(outEvent);
+	
+				String r = "Age\t\t\t:\t" + user.get(3);
+	
+				outEvent.add(r);
+	
+				output.setItems(outEvent);
+	
+				String a = "Filiere\t:\t" + user.get(4);
+	
+				outEvent.add(a);
+	
+				output.setItems(outEvent);
+			
+	
+			}
+		}catch(Exception e) 
+		{
+			System.out.println("Aucun visage detecté");
 		}
-
 		count++;
 
 		putOnLog("Face Recognition Activated !");
@@ -268,16 +493,22 @@ public class SampleController {
 	}
 
 	@FXML
-	protected void stopRecognise() {
+	protected void stopRecognise() 
+	{
 
 		faceDetect.setIsRecFace(false);
 		faceDetect.clearOutput();
+		stopmakeList();
+		count =0;
+		
 
 		this.user.clear();
-
-		recogniseBtn.setText("Recognise Face");
+	
+		recogniseBtn.setText("Reconnaissance");
 
 		stopRecBtn.setDisable(true);
+		
+		beginList.setDisable(true);
 
 		putOnLog("Face Recognition Deactivated !");
 
@@ -302,7 +533,7 @@ public class SampleController {
 				try {
 					warning.setVisible(true);
 
-					Thread.sleep(2000);
+					Thread.sleep(4000);
 
 					warning.setVisible(false);
 
@@ -311,7 +542,40 @@ public class SampleController {
 
 			}).start();
 
-		} else {
+		} else if(code.getText().length()<4 || code.getText().length()>4) {
+			
+			new Thread(() -> {
+
+				try {
+					warningcode.setVisible(true);
+
+					Thread.sleep(4000);
+
+					warningcode.setVisible(false);
+
+				} catch (InterruptedException ex) {
+				}
+
+			}).start();
+			
+		} else if(!faceDetect.faceDetected()) {
+			
+			new Thread(() -> {
+
+				try {
+					warningface.setVisible(true);
+
+					Thread.sleep(4000);
+
+					warningface.setVisible(false);
+
+				} catch (InterruptedException ex) {
+				}
+
+			}).start();
+		}
+		
+		else {
 			//Progressbar
 			pb.setVisible(true);
 
@@ -320,6 +584,7 @@ public class SampleController {
 			new Thread(() -> {
 
 				try {
+					
 
 					faceDetect.setFname(fname.getText());
 
@@ -361,12 +626,7 @@ public class SampleController {
 						 }
 						 });
 
-				
-					
-					
 
-					
-					
 					javafx.application.Platform.runLater(new Runnable(){
 						
 						@Override
@@ -382,7 +642,7 @@ public class SampleController {
 
 			faceDetect.setSaveFace(true);
 
-		}
+		} 
 
 	}
 
@@ -393,6 +653,7 @@ public class SampleController {
 
 		startCam.setVisible(true);
 		stopBtn.setVisible(false);
+		faceDetect.setIsMakeList(false);
 
 		/* this.saveFace=true; */
 
@@ -402,10 +663,8 @@ public class SampleController {
 		saveBtn.setDisable(true);
 		dataPane.setDisable(true);
 		stopRecBtn.setDisable(true);
-		//eyeBtn.setDisable(true);
-		//smileBtn.setDisable(true);
-		//fullBodyBtn.setDisable(true);
-		//upperBodyBtn.setDisable(true);
+		beginList.setDisable(true);
+
 		
 		database.db_close();
 		putOnLog("Database Connection Closed");
