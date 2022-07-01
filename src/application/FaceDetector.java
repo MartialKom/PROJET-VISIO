@@ -112,12 +112,40 @@ public class FaceDetector implements Runnable {
 	public int matricule;
 	public int reg;
 	public int age;
+	public String id;
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String fname; //first name
 	public String Lname; //last name
 	public String sec; //section
 	public String name; 
 	public String repertoire;
+	public int idCours;
+	public String dateP;
+	public String periodeP;
+	
+	public void setdateP(String date) {
+		this.dateP = date;
+	}
+	
+	public void setperiodeP(String periode) {
+		this.periodeP = periode;
+	}
+	
+	public int getidCours() {
+		return idCours;
+	}
+	
+	public void setidCours(int id) {
+		this.idCours = id;
+	}
 
 	public String getRepertoire() {
 		return repertoire;
@@ -310,30 +338,24 @@ public class FaceDetector implements Runnable {
 									if(recogniseCode != -1)
 									{
 										database.init();
-										user = new ArrayList<String>();
-										user = database.getUser(this.recogniseCode);
+										ArrayList<String> user = database.getUser(this.recogniseCode);
 										this.output = user;
 
-										names = user.get(1) + " "; //user.get(2);
+										names = user.get(1) + ""+user.get(2); //user.get(2);
 										
 										g2.setColor(Color.GREEN);
 										
 										if(ismakeList) 
 										{
-											
+											// Edition de la liste de présence
 											liste = new Liste();
 											
-											liste.editerListe(user.get(0), user.get(1), user.get(2), user.get(4), repertoire);
 											
-						/*			
-						 * 
-						 * On vérifie la valeur de la variable. Si 0 on passe à l'écriture du fichier
-						 * 	Insertion du nom dans le fichier de présence et dans la base de données
-										
-										recuperer les informations de la liste de présences (date, heure, nom du prof, matiere,
-										
-										filiere) afin de la créer
-										*/
+											if(database.verifFiliere(idCours, user.get(4))) {
+												liste.editerListe(user.get(5), user.get(1), user.get(2), user.get(4), repertoire);
+												database.insererPresence(idCours,user.get(5), dateP, periodeP);
+											} else System.out.println("L'etudiant n'appartient pas à la filière précisé");
+											
 										}
 									}
 								
@@ -348,7 +370,7 @@ public class FaceDetector implements Runnable {
 
 								if (saveFace) { //saving captured face to the disk
 									//keep it in mind that face code should be unique to each person
-									String fName = "faces/" + matricule + "-" + fname + "_" + Lname + "_" + count + ".jpg";
+									String fName = "faces/" + matricule + "-" + fname + "_" + Lname + "_" + count + ".png";
 									cvSaveImage(fName, temp);
 									count++;
 

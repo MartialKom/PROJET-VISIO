@@ -27,10 +27,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.*;
+import javafx.scene.layout.AnchorPane;
 
 
 
 import java.awt.FontFormatException;
+import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,6 +97,10 @@ public class SampleController  {
 	@FXML
 	private Button endList;
 	@FXML
+	private Button dialogfaceOui;
+	@FXML
+	private Button dialogfaceNon;
+	@FXML
 	private Button filechoose;
 	@FXML
 	private ImageView frame;
@@ -105,13 +111,16 @@ public class SampleController  {
 	@FXML
 	private TitledPane dataPane;
 	@FXML
+	private TitledPane eventPane;
+	@FXML
 	private TextField fname;
 	@FXML
 	private TextField lname;
 	@FXML
 	private TextField code;
-	@FXML
-	private TextField filiere;
+
+	private String filiere="";
+	private String filiereE="";
 	@FXML
 	private TextField nomprof;
 	@FXML 
@@ -123,6 +132,8 @@ public class SampleController  {
 	private TextField sec;
 	@FXML
 	private TextField age;
+	@FXML
+	private TextField matricule;
 	@FXML
 	public ListView<String> logList;
 	@FXML
@@ -140,6 +151,8 @@ public class SampleController  {
 	@FXML
 	public Label warningperiode;
 	@FXML
+	public AnchorPane dialogface;
+	@FXML
 	public Label title;
 	@FXML
 	public TilePane tile;
@@ -154,6 +167,11 @@ public class SampleController  {
 	public RadioButton periode2; //Methode isSelected pour verifier que c'est sélectionné
 	@FXML
 	public ToggleGroup tg;
+	
+    @FXML
+    private ComboBox comb;
+    @FXML
+    private ComboBox combE;
 	
 	
 
@@ -176,7 +194,29 @@ public class SampleController  {
 	FileChooser fileChooser = new FileChooser();
 	DirectoryChooser directoryChooser = new DirectoryChooser();
 	
-	
+    @FXML
+    public void Selectionner() {
+    	try 
+    	{
+    	filiere = comb.getSelectionModel().getSelectedItem().toString();
+    	}catch(Exception e){
+    		filiere = "";		
+    	}
+    	System.out.println("filiere sélectionné: "+filiere);
+    	
+    }
+    
+    @FXML
+    public void SelectionnerPrim() {
+    	try 
+    	{
+    	filiereE = combE.getSelectionModel().getSelectedItem().toString();
+    	}catch(Exception e){
+    		filiereE = "";		
+    	}
+    	System.out.println("filiere sélectionné: "+filiereE);
+    	
+    }
 
 	
 	//**********************************************************************************************
@@ -214,6 +254,8 @@ public class SampleController  {
 	@FXML
 	protected void startCamera() throws SQLException {
 		
+		System.out.println("La filiere est: " +filiere);
+		
 		//*******************************************************************************************
 		//initializing objects from start camera button event
 		faceDetect.init();
@@ -222,7 +264,7 @@ public class SampleController  {
 
 		faceDetect.start();
 		
-	
+		
 		if (!database.init()) {
 
 			putOnLog("Error: Database Connection Failed ! ");
@@ -235,23 +277,24 @@ public class SampleController  {
 		//*******************************************************************************************
 		//Activating other buttons
 		startCam.setVisible(false);
-		//eyeBtn.setDisable(false);
 		stopBtn.setVisible(true);
-		//ocrBtn.setDisable(false);
-		//capBtn.setDisable(false);
 		motionBtn.setDisable(false);
-		//gesture.setDisable(false);
 		saveBtn.setDisable(false);
 
 		if (isDBready) {
 			recogniseBtn.setDisable(false);
 		}
+		
+		ObservableList<String> list = FXCollections.observableArrayList("L1-GENIE_INFO","L2-ISR","L2-GENIE_LOGICIEL","L3-QSIR","L3-CDRI");
+		comb.getSelectionModel().clearSelection();
+		combE.getSelectionModel().clearSelection();
+		comb.setItems(list);
+		combE.setItems(list);
+	
 
+		
 		dataPane.setDisable(false);
-		// shapeBtn.setDisable(false);
-		//smileBtn.setDisable(false);
-		//fullBodyBtn.setDisable(false);
-		//upperBodyBtn.setDisable(false);
+		eventPane.setDisable(false);
 
 		if (stopRecBtn.isDisable()) {
 			//stopRecBtn.setDisable(false);
@@ -291,7 +334,7 @@ public class SampleController  {
 		
 		// Vérifier que les champs de présences sont tous entrés
 		
-		if(filiere.getText().equals("") || dateFiche.getValue()==null || nomprof.getText().equals("") || nomcours.getText().equals("") || nomfich.getText().equals("")) 
+		if(filiere.equals("") || dateFiche.getValue()==null || nomprof.getText().equals("") || nomcours.getText().equals("") || nomfich.getText().equals("")) 
 		{
 		
 			new Thread(() -> {
@@ -376,7 +419,7 @@ public class SampleController  {
 			if(periode1.isSelected()) periode = periode1.getText();
 			if(periode2.isSelected()) periode = periode2.getText();
 			
-			String ligne = String.valueOf(dateFiche.getValue())+"||"+filiere.getText()+"||"+nomprof.getText()+"||"+nomcours.getText()+"||"+periode;
+			String ligne = String.valueOf(date)+"||"+filiere+"||"+nomprof.getText()+"||"+nomcours.getText()+"||"+periode;
 			try 
 			{
 				FileWriter writer = new FileWriter(fichier,true);
@@ -384,7 +427,11 @@ public class SampleController  {
 				
 				
 				bw.newLine();
-				bw.append(ligne);
+				bw.append("+----------------------------------------------------------------+");
+				bw.newLine();
+				bw.append("| "+ligne+" |");
+				bw.newLine();
+				bw.append("+----------------------------------------------------------------+");
 				bw.newLine();
 				bw.newLine();
 				bw.append("*****************************Liste des étudiants présents*****************************");
@@ -400,6 +447,16 @@ public class SampleController  {
 			}
 			
 			
+			int id = database.createCourse(nomcours.getText(), filiere,nomprof.getText());
+			
+			if(id!=0) {
+				putOnLog("le Cours à été créé dans la base de données ID: "+id);
+			}
+			
+			
+			faceDetect.setidCours(id);
+			faceDetect.setperiodeP(periode);
+			faceDetect.setdateP(String.valueOf(date));
 			// On envoi une valeur True pour la variable ismakeList
 			faceDetect.setRepertoire(repertoire);
 			faceDetect.setIsMakeList(true);
@@ -448,31 +505,31 @@ public class SampleController  {
 	
 				outEvent.add(t);
 	
-				String n1 = "Nom\t\t:\t" + user.get(1);
+				String n1 = "Nom: " + user.get(1);
 	
 				outEvent.add(n1);
 	
 				output.setItems(outEvent);
 	
-				String n2 = "Prenom\t\t:\t" + user.get(2);
+				String n2 = "Prenom: " + user.get(2);
 	
 				outEvent.add(n2);
 	
 				output.setItems(outEvent);
 	
-				String fc = "code\t\t:\t" + user.get(0);
+				String fc = "Matricule: " + user.get(5);
 	
 				outEvent.add(fc);
 	
 				output.setItems(outEvent);
 	
-				String r = "Age\t\t\t:\t" + user.get(3);
+				String r = "Age: " + user.get(3);
 	
 				outEvent.add(r);
 	
 				output.setItems(outEvent);
 	
-				String a = "Filiere\t:\t" + user.get(4);
+				String a = "Filiere: " + user.get(4);
 	
 				outEvent.add(a);
 	
@@ -526,7 +583,7 @@ public class SampleController  {
 	protected void saveFace() throws SQLException {
 
 		//Input Validation
-		if (fname.getText().trim().isEmpty()  || code.getText().trim().isEmpty()) {
+		if (fname.getText().trim().isEmpty()  || code.getText().trim().isEmpty() || matricule.getText().trim().isEmpty() || lname.getText().trim().isEmpty() || age.getText().trim().isEmpty() || filiereE.equals("")  ) {
 
 			new Thread(() -> {
 
@@ -558,21 +615,25 @@ public class SampleController  {
 
 			}).start();
 			
-		} else if(!faceDetect.faceDetected()) {
-			
-			new Thread(() -> {
-
-				try {
-					warningface.setVisible(true);
-
-					Thread.sleep(4000);
-
-					warningface.setVisible(false);
-
-				} catch (InterruptedException ex) {
-				}
-
-			}).start();
+		} /*
+			 * else if(!faceDetect.faceDetected()) {
+			 * 
+			 * new Thread(() -> {
+			 * 
+			 * try { warningface.setVisible(true);
+			 * 
+			 * Thread.sleep(4000);
+			 * 
+			 * warningface.setVisible(false);
+			 * 
+			 * } catch (InterruptedException ex) { }
+			 * 
+			 * }).start(); }
+			 */ else if(database.userExist(Integer.parseInt(code.getText()))) {
+			saveBtn.setDisable(true);
+			pdPane.setDisable(true);
+			dialogface.setVisible(true);
+			dialogface.setDisable(false);
 		}
 		
 		else {
@@ -584,22 +645,22 @@ public class SampleController  {
 			new Thread(() -> {
 
 				try {
-					
-
 					faceDetect.setFname(fname.getText());
 
 					faceDetect.setFname(fname.getText());
 					faceDetect.setLname(lname.getText());
 					faceDetect.setAge(Integer.parseInt(age.getText()));
 					faceDetect.setCode(Integer.parseInt(code.getText()));
-					faceDetect.setSec(sec.getText());
+					faceDetect.setSec(filiereE);
+					faceDetect.setId(matricule.getText());
 					
 
 					database.setFname(fname.getText());
 					database.setLname(lname.getText());
 					database.setAge(Integer.parseInt(age.getText()));
 					database.setCode(Integer.parseInt(code.getText()));
-					database.setSec(sec.getText());
+					database.setSec(filiereE);
+					database.setId(matricule.getText());
 					
 
 					database.insert();
@@ -616,7 +677,7 @@ public class SampleController  {
 					
 
 					savedLabel.setVisible(true);
-					Thread.sleep(2000);
+					Thread.sleep(4000);
 					
 					javafx.application.Platform.runLater(new Runnable(){
 						
@@ -645,6 +706,77 @@ public class SampleController  {
 		} 
 
 	}
+	
+	@FXML
+	protected void oui() {
+		//Progressbar
+		pb.setVisible(true);
+
+		savedLabel.setVisible(true);
+		dialogface.setVisible(false);
+		dialogface.setDisable(true);
+
+		new Thread(() -> {
+
+			try {
+
+				faceDetect.setFname(fname.getText());
+
+				faceDetect.setFname(fname.getText());
+				faceDetect.setLname(lname.getText());
+				faceDetect.setAge(Integer.parseInt(age.getText()));
+				faceDetect.setCode(Integer.parseInt(code.getText()));
+				faceDetect.setSec(sec.getText());
+				faceDetect.setId(matricule.getText());
+				
+				javafx.application.Platform.runLater(new Runnable(){
+					
+					@Override
+					 public void run() {
+						pb.setProgress(100);
+					 }
+					 });
+
+
+				
+
+				savedLabel.setVisible(true);
+				Thread.sleep(4000);
+				
+				javafx.application.Platform.runLater(new Runnable(){
+					
+					@Override
+					 public void run() {
+						pb.setVisible(false);
+					 }
+					 });
+
+
+				javafx.application.Platform.runLater(new Runnable(){
+					
+					@Override
+					 public void run() {
+				 savedLabel.setVisible(false);
+					 }
+					 });
+
+			} catch (InterruptedException ex) {
+			}
+
+		}).start();
+
+		faceDetect.setSaveFace(true);
+		saveBtn.setDisable(false);
+		pdPane.setDisable(false);
+	}
+	
+	@FXML
+	protected void non() {
+		dialogface.setVisible(false);
+		dialogface.setDisable(true);
+		saveBtn.setDisable(false);
+		pdPane.setDisable(false);
+	}
 
 	@FXML
 	protected void stopCam() throws SQLException {
@@ -662,6 +794,7 @@ public class SampleController  {
 		recogniseBtn.setDisable(true);
 		saveBtn.setDisable(true);
 		dataPane.setDisable(true);
+		eventPane.setDisable(true);
 		stopRecBtn.setDisable(true);
 		beginList.setDisable(true);
 

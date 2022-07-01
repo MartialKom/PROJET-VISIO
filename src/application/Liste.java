@@ -8,13 +8,15 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Liste 
+
 {
 
+
 	
-	public void editerListe(String code, String nom, String prenom, String filiere, String path) 
+	public void editerListe(String matricule, String nom, String prenom, String filiere, String path) 
 	{
 		
-		String ligne = code+"#"+nom+"#"+prenom+"#"+filiere+"#";
+		String ligne = matricule+"#"+nom+"#"+prenom+"#"+filiere+"#";
 	    FileInputStream file;
 	    File fichier = new File(path);
 	    
@@ -43,6 +45,8 @@ public class Liste
 			System.out.println("Nom enregistré");
 			bw.close();
 			writer.close();
+			
+			
 			
 			
 		} catch (Exception e) 

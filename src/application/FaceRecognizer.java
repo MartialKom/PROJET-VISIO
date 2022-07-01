@@ -119,7 +119,7 @@ public class FaceRecognizer {
 	
 		//Confidence value less than 60 means face is known 43
 		//Confidence value greater than 60 means face is unknown 
-		 if(confidence.get(0) > 46 )
+		 if(confidence.get(0) > 50 )
 		 {
 			 //System.out.println("-1");
 			 return -1;

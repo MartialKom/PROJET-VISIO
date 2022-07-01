@@ -16,7 +16,7 @@ import javafx.fxml.FXMLLoader;
 public class Main extends Application {
 
 
-
+public static  final String departement = "Genie Informatique";
 
 	
 	@Override
@@ -40,6 +40,7 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+		
 		launch(args);
 		
 		
