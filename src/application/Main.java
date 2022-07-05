@@ -34,7 +34,8 @@ public static  final String departement = "Genie Informatique";
 			primaryStage.show();
 			
 	
-		} catch(Exception e) {
+		} catch(Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}

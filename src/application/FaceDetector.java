@@ -66,7 +66,15 @@ public class FaceDetector implements Runnable {
 	public Label ll;
 	private Exception exception = null;
 	
-	private int count = 0;
+	private int count;
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	public String classiferName;
 	public File classifierFile;
 	
@@ -204,7 +212,7 @@ public class FaceDetector implements Runnable {
 				grabbedImage = grabberConverter.convert(grabber.grab());
 
 			}
-			int count = 15;
+
 			grayImage = cvCreateImage(cvGetSize(grabbedImage), 8, 1); //converting image to grayscale
 			
 			//reducing the size of the image to speed up the processing
@@ -350,12 +358,13 @@ public class FaceDetector implements Runnable {
 											// Edition de la liste de présence
 											liste = new Liste();
 											
-											
+											if(database.init()) {
 											if(database.verifFiliere(idCours, user.get(4))) {
 												liste.editerListe(user.get(5), user.get(1), user.get(2), user.get(4), repertoire);
 												database.insererPresence(idCours,user.get(5), dateP, periodeP);
-											} else System.out.println("L'etudiant n'appartient pas à la filière précisé");
+											} else System.out.println("L'etudiant n'appartient pas à la filière précisée");
 											
+										}
 										}
 									}
 								

@@ -27,7 +27,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.SampleController">
+<BorderPane prefHeight="720.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
    <center>
       <TitledPane alignment="CENTER" collapsible="false" ellipsisString="" lineSpacing="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="712.0" text="VISIO" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" BorderPane.alignment="CENTER">
         <content>
@@ -242,30 +242,30 @@
                <children>
                   <SplitPane layoutX="-5.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="496.0" prefWidth="287.0">
                     <items>
-                        <ScrollPane prefHeight="494.0" prefViewportHeight="244.0" prefViewportWidth="328.0" prefWidth="260.0">
+                        <ScrollPane prefHeight="428.0" prefViewportHeight="244.0" prefViewportWidth="328.0" prefWidth="285.0">
                            <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="520.0" prefWidth="405.0">
                                  <children>
-                                    <Label layoutX="68.0" layoutY="7.0" text="Evennements:" textFill="#3d8583">
+                                    <Label layoutX="68.0" layoutY="7.0" text="Evenements:" textFill="#3d8583">
                                        <font>
                                           <Font name="Vermin Vibes 4 Helium" size="22.0" />
                                        </font>
                                     </Label>
                                     <Separator layoutX="77.0" layoutY="37.0" prefHeight="5.0" prefWidth="123.0" />
-                                    <ListView fx:id="logList" editable="true" layoutX="-2.0" layoutY="37.0" prefHeight="194.0" prefWidth="261.0" style="-fx-padding: 10;">
+                                    <ListView fx:id="logList" editable="true" layoutX="-2.0" layoutY="37.0" prefHeight="139.0" prefWidth="261.0" style="-fx-padding: 10;">
                                        <effect>
                                           <Glow />
                                        </effect>
                                     </ListView>
-                                    <Separator layoutX="77.0" layoutY="272.0" prefHeight="5.0" prefWidth="123.0" />
-                                    <Label layoutX="52.0" layoutY="240.0" text="Fiche de presence" textFill="#3d8583">
+                                    <Separator layoutX="77.0" layoutY="225.0" prefHeight="5.0" prefWidth="123.0" />
+                                    <Label layoutX="52.0" layoutY="196.0" text="Fiche de presence" textFill="#3d8583">
                                        <font>
                                           <Font name="Vermin Vibes 4 Helium" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane layoutX="2.0" layoutY="279.0" prefHeight="204.0" prefWidth="264.0">
+                                    <ScrollPane layoutX="2.0" layoutY="234.0" prefHeight="249.0" prefWidth="264.0">
                                       <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" opacity="0.78" prefHeight="218.0" prefWidth="252.0" style="-fx-background-color: black;">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" opacity="0.78" prefHeight="226.0" prefWidth="252.0" style="-fx-background-color: black;">
                                              <children>
                                                 <DatePicker fx:id="dateFiche" layoutX="109.0" layoutY="41.0" prefHeight="25.0" prefWidth="114.0" promptText="Date du jour" />
                                                 <TextField fx:id="nomprof" alignment="CENTER" layoutX="101.0" layoutY="83.0" prefHeight="25.0" prefWidth="144.0" promptText="Nom du professeur" />

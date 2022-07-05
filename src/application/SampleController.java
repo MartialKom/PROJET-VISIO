@@ -313,13 +313,18 @@ public class SampleController  {
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		
+		
 		//Image reader from the mentioned folder
 	tile.getChildren().clear();
+	
 		for (final File file : listOfFiles) {
 
 			imageView1 = createImageView(file);
 			tile.getChildren().addAll(imageView1);
+			
 		}
+	faceDetect.setCount(listOfFiles.length);
+	System.out.println(listOfFiles.length);
 		putOnLog(" Real Time WebCam Stream Started !");
 		
 		//**********************************************************************************************
@@ -664,6 +669,7 @@ public class SampleController  {
 					
 
 					database.insert();
+					faceDetect.setSaveFace(true);
 					
 					javafx.application.Platform.runLater(new Runnable(){
 						
@@ -696,12 +702,29 @@ public class SampleController  {
 						 }
 						 });
 
+					
+					
 				} catch (InterruptedException ex) {
 				}
 
 			}).start();
 
-			faceDetect.setSaveFace(true);
+			
+						
+			String path = filePath;
+
+			File folder = new File(path);
+			File[] listOfFiles = folder.listFiles();
+			
+			//Image reader from the mentioned folder
+		tile.getChildren().clear();
+			for (final File file : listOfFiles) {
+
+				imageView1 = createImageView(file);
+				tile.getChildren().addAll(imageView1);
+				
+			}
+		
 
 		} 
 
@@ -726,7 +749,7 @@ public class SampleController  {
 				faceDetect.setLname(lname.getText());
 				faceDetect.setAge(Integer.parseInt(age.getText()));
 				faceDetect.setCode(Integer.parseInt(code.getText()));
-				faceDetect.setSec(sec.getText());
+				
 				faceDetect.setId(matricule.getText());
 				
 				javafx.application.Platform.runLater(new Runnable(){
@@ -768,6 +791,22 @@ public class SampleController  {
 		faceDetect.setSaveFace(true);
 		saveBtn.setDisable(false);
 		pdPane.setDisable(false);
+		
+		String path = filePath;
+
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		
+		//Image reader from the mentioned folder
+	tile.getChildren().clear();
+	
+		for (final File file : listOfFiles) {
+
+			imageView1 = createImageView(file);
+			tile.getChildren().addAll(imageView1);
+			
+		}
+	
 	}
 	
 	@FXML

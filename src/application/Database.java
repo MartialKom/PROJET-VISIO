@@ -285,9 +285,10 @@ class Database {
 			prepare.setInt(1, idCours);
 			
 			ResultSet r =prepare.executeQuery();
-			if(r.next()) {
+			while(r.next()) {
 				 filiereCours = r.getString("filiere");
 			}
+			System.out.println("la filiere du cours est: "+filiereCours);
 			
 			if(filiereCours.equals(filiereE)) return true;
 			else return false;
