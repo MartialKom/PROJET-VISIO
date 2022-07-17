@@ -26,15 +26,15 @@ class Database {
 
 	public final String Database_name = "visio";
 	public final String Database_user = "root";
-	public final String Database_pass = "mercip@p@123";
+	public final String Database_pass = "";
 
 	public Connection con;
 
 	public boolean init() throws SQLException {
 		
-		String lien="jdbc:mysql://localhost:3306/visio?verifyServerCertificate=false&useSSL=true";
+		String lien="jdbc:mysql://localhost:3306/visio";
 		String user="root";
-		String pass="mercip@p@123";
+		String pass="";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
