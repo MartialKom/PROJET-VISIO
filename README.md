@@ -6,7 +6,7 @@
 VISIO is a Smart Computer Vision Application with various functionalities. I have tried to put as many Machine Learning tools as possible into one single Application for greater productivity.
 
 <p align="center">
- <img src="./recognise.png" alt="Logo" style="width: 300px;"/></div>
+ <img src="./recognise.png" alt="Appercu reconnaissance faciale" style="width: 300px;"/></div>
 </p>
 
 ## KEY FEATURES
@@ -24,7 +24,7 @@ VISIO is a Smart Computer Vision Application with various functionalities. I hav
 * Maven
 
 # Installation Guide
-For more informations contact Tamaroas-Dev from facebook
+For more informations contact Tamaroas-Dev from facebook or send a mail to <b>martialkom123@gmail.com</b>
 ## Maven Dependencies
 ```xml
      <dependency>
@@ -112,33 +112,6 @@ class Database {
 	.
 	.
 	.
-```
-# LICENCE
-
-```licence
-
-IUT License
-
-Copyright (c) 2022 Kom Kanmegne Martial
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
 ```
 
        
